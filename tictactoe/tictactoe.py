@@ -1,4 +1,4 @@
-import random
+
 
 class TicTacToe:
     def __init__(self):
@@ -60,29 +60,74 @@ class TicTacToe:
         if player == "X":
             self.take_manual_turn(player)
         if player == "O":
-            self.take_random_turn(player)
+            self.take_minimax_turn(player)
         return
 
-    def take_random_turn(self, player):
-        row = random.randrange(0, 3)
-        col = random.randrange(0, 3)
-        while self.is_valid_move(row, col) == False:
-            row = random.randrange(0, 3)
-            col = random.randrange(0, 3)
+    def take_minimax_turn(self, player):
+        score, row, col = self.minimax(player)
         self.place_player(player, row, col)
         self.print_board()
-
         return
 
+
+
+
+
+
+
+    def minimax(self, player):
+        opt_row = -1
+        opt_col = -1
+        if self.check_win("O") == True:
+            score = 10
+            return score, None, None
+
+        if self.check_tie():
+            score = 0
+            return score, None, None
+
+        if self.check_win("X") == True:
+            score = -10
+            return score, None, None
+
+        if player == "O":
+            best = -10
+            for row in range(0, 3):
+                for col in range(0, 3):
+                    if self.board[row][col] == "-":
+                        self.place_player(player, row, col)
+                        score = self.minimax("X")[0]
+                        if best < score:
+                            best = score
+                            opt_row = row
+                            opt_col = col
+                        self.place_player("-", row, col)
+            return best, opt_row, opt_col
+        if player == "X":
+            worst = 10
+            for r in range(0, 3):
+                for c in range(0, 3):
+                    if self.board[r][c] == "-":
+                        self.place_player(player, r, c)
+                        score = self.minimax("O")[0]
+                        if worst > score:
+                            worst = score
+                            opt_row = r
+                            opt_col = c
+                        self.place_player("-", r, c)
+
+            return worst, opt_row, opt_col
+
+        return
 
     def check_col_win(self, player):
         # TODO: Check col win
 
 
-        if self.board[0][0] == player == self.board[1][0] == self.board[2][0]:
+        if self.board[0][0] == player and self.board[1][0] == player and self.board[2][0] == player:
             return True
 
-        if self.board[0][1] == player == self.board[1][1] == self.board[2][1]:
+        if self.board[0][1] == player and player == self.board[1][1] and player == self.board[2][1]:
             return True
 
         if self.board[0][2] == player == self.board[1][2] == self.board[2][2]:
@@ -92,16 +137,13 @@ class TicTacToe:
 
     def check_row_win(self, player):
         # TODO: Check row win
-
-
-       if self.board[0][0] == player == self.board[0][1] == self.board[0][2]:
+       if self.board[0][0] == player and player == self.board[0][1] and player == self.board[0][2]:
             return True
 
-       if self.board[1][0] == player == self.board[1][1] == self.board[1][2]:
+       if self.board[1][0] == player and player == self.board[1][1] and player == self.board[1][2]:
             return True
 
-
-       if self.board[2][0] == player == self.board[2][1] == self.board[2][2]:
+       if self.board[2][0] == player and player == self.board[2][1] and player == self.board[2][2]:
             return True
 
        return False
@@ -122,7 +164,7 @@ class TicTacToe:
     def check_win(self, player):
         # TODO: Check win
         if self.check_col_win(player) == True or self.check_row_win(player) == True or self.check_diag_win(player) == True:
-            print(player + " wins!")
+
             return True
         return False
 
@@ -145,11 +187,16 @@ class TicTacToe:
         self.print_instructions()
         self.print_board
         while not self.check_win(player1) and not self.check_tie() and not self.check_win(player2):
-                self.take_turn(player1)
-                self.check_win(player1)
+            self.take_turn(player1)
+            if not self.check_win(player1) and not self.check_tie():
                 self.take_turn(player2)
-                self.check_win(player2)
-
         print("Game Over.")
+        if self.check_win(player1):
+            print("X Wins!")
+        if self.check_win(player2):
+            print("O Wins!")
+        elif self.check_tie():
+            print("Tie!")
+
         return
 
