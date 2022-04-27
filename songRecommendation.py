@@ -37,5 +37,17 @@ km = KMeans(n_clusters=k).fit(x)
 centroids = km.cluster_centers_
 labels = km.labels_
 
+cluster = []
 for i in range(k):
-    cluster = x[labels == i]
+    cluster.append(x[labels == i])
+
+userSong = input("What is your favorite song?\n")
+
+print(cluster)
+
+for i in range(k):
+    for t in range(len(cluster[i])):
+        clusterSearch = cluster[i][t]
+        if clusterSearch == userSong:
+            print(cluster[i])
+
