@@ -8,20 +8,20 @@ from sklearn.cluster import KMeans
 
 #Load Data
 dataStats = pd.read_csv("data/SongData.csv")
-dataGenre = pd.read_csv("data/data_w_genres.csv")
+dataGenre = pd.read_csv("data/SongData.csv")
 
 
 #Turn non-numerical values into numbers and load data
-feature_genres = dataGenre["genres"].values
-genre_transformer = LabelEncoder().fit(feature_genres)
-feature_genres = genre_transformer.transform(feature_genres)
+#feature_genres = dataGenre["genres"].values
+#genre_transformer = LabelEncoder().fit(feature_genres)
+#feature_genres = genre_transformer.transform(feature_genres)
 
 feature_danceability = dataGenre["danceability"].values
 feature_instrumentalness = dataGenre["instrumentalness"].values
 feature_speechiness = dataGenre["speechiness"].values
 feature_popularity = dataGenre["popularity"].values
 
-x = np.array([feature_genres, feature_danceability, feature_instrumentalness, feature_speechiness, feature_popularity]
+x = np.array([feature_danceability, feature_instrumentalness, feature_speechiness, feature_popularity]
              ).transpose()
 
 #Standardize Data
@@ -43,11 +43,18 @@ for i in range(k):
 
 userSong = input("What is your favorite song?\n")
 
-print(cluster)
 
 for i in range(k):
     for t in range(len(cluster[i])):
         clusterSearch = cluster[i][t]
-        if clusterSearch == userSong:
-            print(cluster[i])
+        results = dataGenre.loc[(dataGenre['danceability'] == clusterSearch[0]) &
+                                    (dataGenre['instrumentalness'] == clusterSearch[1]) &
+                                (dataGenre['speechiness'] == clusterSearch[2])]
+        name = results.loc['name']
+        if name == userSong:
+            #print cluster
+
+
+
+
 
