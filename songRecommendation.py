@@ -37,22 +37,30 @@ km = KMeans(n_clusters=k).fit(x)
 centroids = km.cluster_centers_
 labels = km.labels_
 
-cluster = []
-for i in range(k):
-    cluster.append(x[labels == i])
+#cluster = []
+#for i in range(k):
+    #cluster.append(x[labels == i])
 
 userSong = input("What is your favorite song?\n")
+song = dataGenre.loc[dataGenre['name'] == userSong]
+index = song.index.values
+clusterNumber = labels[index]
+
+for i in range(len(labels)):
+    if labels[i] == clusterNumber:
+        print(dataGenre[i]["name"])
 
 
-for i in range(k):
-    for t in range(len(cluster[i])):
-        clusterSearch = cluster[i][t]
-        results = dataGenre.loc[(dataGenre['danceability'] == clusterSearch[0]) &
-                                    (dataGenre['instrumentalness'] == clusterSearch[1]) &
-                                (dataGenre['speechiness'] == clusterSearch[2])]
-        name = results.loc['name']
-        if name == userSong:
-            #print cluster
+
+# for i in range(i):
+#     for t in range(len(cluster[t])):
+#         clusterSearch = cluster[i][t]
+#         results = dataGenre.loc[(dataGenre['danceability'] == clusterSearch[0]) &
+#                                     (dataGenre['instrumentalness'] == clusterSearch[1]) &
+#                                 (dataGenre['speechiness'] == clusterSearch[2])]
+#
+#         if name == userSong:
+
 
 
 
