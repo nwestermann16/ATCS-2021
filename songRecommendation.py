@@ -28,6 +28,20 @@ x = np.array([feature_danceability, feature_instrumentalness, feature_speechines
 scaler = StandardScaler().fit(x)
 features = scaler.transform(x)
 
+
+#inertias = []
+#for k in range(1, 100):
+      ## build model
+      #kmeanModel = KMeans(n_clusters=k).fit(x)
+#     ##store inertia
+      #inertias.append(kmeanModel.inertia_)
+# #Plot inertias to find the Elbow
+#plt.plot(range(1, 100), inertias, "bx-")
+#plt.xlabel("Values of K")
+#plt.ylabel("Inertia")
+#plt.title("The Elbow Method using Inertia")
+#plt.show()
+
 #Create Model
 k = 5
 km = KMeans(n_clusters=k).fit(x)
@@ -46,9 +60,10 @@ song = dataGenre.loc[dataGenre['name'] == userSong]
 index = song.index.values
 clusterNumber = labels[index]
 
-for i in range(len(labels)):
-    if labels[i] == clusterNumber:
-        print(dataGenre[i]["name"])
+print("Here is a playlist based on similar songs:")
+for i in range(1, 10):
+        if labels[i] == clusterNumber:
+            print(dataGenre.iloc[i]["name"])
 
 
 
