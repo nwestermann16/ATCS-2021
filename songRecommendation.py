@@ -7,7 +7,7 @@ from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.cluster import KMeans
 
 #Load Data
-dataStats = pd.read_csv("data/SongData.csv")
+
 dataGenre = pd.read_csv("data/SongData.csv")
 
 
@@ -51,33 +51,43 @@ km = KMeans(n_clusters=k).fit(x)
 centroids = km.cluster_centers_
 labels = km.labels_
 
-#cluster = []
-#for i in range(k):
-    #cluster.append(x[labels == i])
+# Get user input
+
 
 userSong = input("What is your favorite song?\n")
+
+#finds song in data and gets index
 song = dataGenre.loc[dataGenre['name'] == userSong]
 index = song.index.values
+print(index)
+
+if len(index) > 1:
+    index = index[0]
+    # uses labels to find cluster
 clusterNumber = labels[index]
+print(clusterNumber)
 
-print("Here is a playlist based on similar songs:")
-for i in range(1, 10):
-        if labels[i] == clusterNumber:
-            print(dataGenre.iloc[i]["name"])
+# Print 10 songs from cluster that includes user input
+print("Here is a playlist based on your favorite song:")
+for i in range(1, 100):
+    if labels[i] == clusterNumber:
+        print(dataGenre.iloc[i]["name"])
 
+# Get user input
+userArtist = input("Who is your favorite artist\n")
 
+#finds artist in data and gets index
+artist = dataGenre.loc[dataGenre['artists'] == userArtist]
+indexArtist = artist.index.values
 
-# for i in range(i):
-#     for t in range(len(cluster[t])):
-#         clusterSearch = cluster[i][t]
-#         results = dataGenre.loc[(dataGenre['danceability'] == clusterSearch[0]) &
-#                                     (dataGenre['instrumentalness'] == clusterSearch[1]) &
-#                                 (dataGenre['speechiness'] == clusterSearch[2])]
-#
-#         if name == userSong:
+if len(indexArtist) > 1:
+    indexArtist = indexArtist[0]
+# uses labels to find cluster
+clusterNumberArtist = labels[indexArtist]
 
-
-
-
+print("Here are some similar artists based on your favorite artist:")
+for i in range(1, 100):
+    if labels[i] == clusterNumberArtist:
+        print(dataGenre.iloc[i]["artists"])
 
 
